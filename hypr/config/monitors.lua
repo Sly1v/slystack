@@ -1,25 +1,26 @@
+-- Hardware-tailored display profile for Dell Laptop (1920x1080)
+-- Primary display: eDP-1 (1080p @ 60Hz with 1.5x fractional scale)
 hl.monitor({
-	output = "DP-2",
-	mode = "3840x2160@60",
+	output = "eDP-1",
+	mode = "1920x1080@60.02",
 	position = "0x0",
-	scale = 2,
+	scale = 1.5,
 })
 
+-- Dynamic fallback for any connected external monitor (HDMI / USB-C / DisplayPort)
 hl.monitor({
-	output = "HDMI-A-3",
+	output = "",
 	mode = "preferred",
 	position = "auto-right",
 	scale = 1,
 })
 
-hl.workspace_rule({ workspace = "1", monitor = "DP-2", default = true, persistent = true })
-hl.workspace_rule({ workspace = "2", monitor = "DP-2", persistent = true })
-hl.workspace_rule({ workspace = "3", monitor = "DP-2", persistent = true })
-hl.workspace_rule({ workspace = "4", monitor = "DP-2", persistent = true })
-hl.workspace_rule({ workspace = "5", monitor = "DP-2", persistent = true })
-hl.workspace_rule({
-	workspace = "11",
-	monitor = "HDMI-A-3",
-	default = true,
-	persistent = true,
-})
+-- Bind persistent workspaces 1-10 to the primary display
+for w = 1, 10 do
+	hl.workspace_rule({
+		workspace = tostring(w),
+		monitor = "eDP-1",
+		default = (w == 1),
+		persistent = true,
+	})
+end

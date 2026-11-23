@@ -117,7 +117,7 @@ widget_order = [ "desktop-widget-0000000000000001" ]
     box_width = 384.0
     cx = 208.0
     cy = 132.0
-    output = "DP-2"
+    output = "eDP-1"
     rotation = 0.0
     type = "clock"
 
@@ -148,48 +148,23 @@ fingerprint = false
 
 [lockscreen_widgets]
 schema_version = 2
-widget_order = [ "lockscreen-login-box@DP-2", "lockscreen-login-box@HDMI-A-3" ]
+widget_order = [ "lockscreen-login-box@eDP-1" ]
 
     [lockscreen_widgets.grid]
     cell_size = 16
     major_interval = 4
     visible = true
 
-    [lockscreen_widgets.widget."lockscreen-login-box@DP-2"]
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
     box_height = 196.0
     box_width = 810.0
     cx = 960.0
-    cy = 898.0
-    output = "DP-2"
+    cy = 800.0
+    output = "eDP-1"
     rotation = 0.0
     type = "login_box"
 
-        [lockscreen_widgets.widget."lockscreen-login-box@DP-2".settings]
-        background_color = "surface_variant"
-        background_opacity = 0.88
-        background_radius = 12.0
-        center_password_text = false
-        input_opacity = 1.0
-        input_radius = 6.0
-        layout = "regular"
-        show_caps_lock = true
-        show_keyboard_layout = true
-        show_login_button = true
-        show_media = true
-        show_session_buttons = true
-        show_unlock_hint = true
-        show_weather = true
-
-    [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-3"]
-    box_height = 196.0
-    box_width = 810.0
-    cx = 960.0
-    cy = 898.0
-    output = "HDMI-A-3"
-    rotation = 0.0
-    type = "login_box"
-
-        [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-3".settings]
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
         background_color = "surface_variant"
         background_opacity = 0.88
         background_radius = 12.0
@@ -311,23 +286,20 @@ wallpaper_scheme = "m3-rainbow"
     enable_community_templates = true
 
 [wallpaper]
-directory = "/home/h4ni0/Downloads"
+directory = "~/.config/backgrounds"
 enabled = true
 
     [wallpaper.automation]
     enabled = false
 
     [wallpaper.default]
-    path = "/home/h4ni0/Downloads/wallhaven-l8dmkr.png"
+    path = "~/.config/backgrounds/wallpaper.png"
 
     [wallpaper.last]
-    path = "/home/h4ni0/Downloads/wallhaven-l8dmkr.png"
+    path = "~/.config/backgrounds/wallpaper.png"
 
-    [wallpaper.monitors.DP-2]
-    path = "/home/h4ni0/Downloads/wallhaven-l8dmkr.png"
-
-    [wallpaper.monitors.HDMI-A-3]
-    path = "/home/h4ni0/Downloads/wallhaven-l8dmkr.png"
+    [wallpaper.monitors.eDP-1]
+    path = "~/.config/backgrounds/wallpaper.png"
 
 [weather]
 enabled = true

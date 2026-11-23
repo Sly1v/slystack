@@ -6,7 +6,8 @@ require("config.devices")
 require("config.keybindings")
 require("config.core")
 
--- For Noctalia Color templates
-require("noctalia").apply_theme()
-
-hl.bind("CTRL + SHIFT + 2", hl.dsp.global("com.t3tools.T3Code:capture-window"))
+-- Noctalia dynamic color scheme hook (applies active theme borders and styles)
+local ok, noctalia = pcall(require, "noctalia")
+if ok and noctalia.apply_theme then
+    noctalia.apply_theme()
+end

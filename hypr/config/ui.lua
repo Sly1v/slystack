@@ -16,10 +16,10 @@ hl.config({ general = { resize_on_border = true } })
 hl.config({ general = { allow_tearing = false } })
 hl.config({ general = { layout = "dwindle" } })
 
-hl.config({ decoration = { rounding = 5 } })
+hl.config({ decoration = { rounding = 8 } })
 hl.config({ decoration = { rounding_power = 2 } })
 hl.config({ decoration = { active_opacity = 1.0 } })
-hl.config({ decoration = { inactive_opacity = 1 } })
+hl.config({ decoration = { inactive_opacity = 0.95 } })
 hl.config({ decoration = { shadow = { enabled = true } } })
 hl.config({ decoration = { shadow = { range = 4 } } })
 hl.config({ decoration = { shadow = { render_power = 3 } } })
@@ -29,10 +29,11 @@ hl.config({ decoration = { blur = { size = 4 } } })
 hl.config({ decoration = { blur = { passes = 4 } } })
 hl.config({ decoration = { blur = { vibrancy = 0.1696 } } })
 
+-- Tailored for 1080p screen at 1.5x scale (logical size fits nicely)
 hl.window_rule({
 	match = { class = "dev.noctalia.Noctalia" },
 	float = true,
-	size = { 1080, 920 },
+	size = { 780, 580 },
 })
 hl.layer_rule({
 	name = "noctalia",

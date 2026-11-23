@@ -1,23 +1,26 @@
-# Ignore everything
+# Ignore everything by default
 *
 
-# Don't ignore these folders and their contents
+# Whitelist tracked directories and files
 !waybar/
 !waybar/**
 !kitty/
 !kitty/**
 !hypr/
 !hypr/**
-!zsh
+!zsh/
 !zsh/**
-!noctalia
+!noctalia/
 !noctalia/**
+!backgrounds/
+!backgrounds/**
 
-# Don't ignore .gitignore itself
+!install.sh
+!README.md
 !.gitignore
 
 # Keep machine-local / private overrides out of the repo
 zsh/*.local.zsh
 
 # Don't track editor/tool backup files
-kitty/*.bak
+*.bak

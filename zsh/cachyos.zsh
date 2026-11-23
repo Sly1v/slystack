@@ -28,6 +28,10 @@ alias big="expac -H M '%m\t%n' | sort -h | nl"
 alias gitpkg='pacman -Q | grep -i "\-git" | wc -l'
 alias update='sudo pacman -Syu'
 
+# ── Hybrid Graphics (NVIDIA MX350 Offload) ──
+alias nv='prime-run'
+alias nvrun='prime-run'
+
 # ── Get fastest mirrors ──
 alias mirror="sudo cachyos-rate-mirrors"
 
@@ -68,4 +72,3 @@ function copy() {
 
 # ── PATH additions ──
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
-[[ -d "$HOME/Applications/depot_tools" ]] && path=("$HOME/Applications/depot_tools" $path)
