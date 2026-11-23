@@ -6,6 +6,25 @@ Tailored specifically to run safely, smoothly, and tear-free on hybrid Intel + N
 
 ---
 
+## ⚡ 1-Command Instant Setup (Zero-Touch)
+
+On a fresh CachyOS / Arch install, simply open your terminal and paste:
+
+```bash
+git clone https://github.com/Sly1v/slystack.git ~/slystack && cd ~/slystack && ./install.sh --auto
+```
+
+### What this single command does automatically:
+1. **Installs all dependencies:** Installs Hyprland, Kitty, Waybar, Zsh, Noctalia shell, JetBrains Nerd Fonts, audio/brightness tools, and video drivers via `pacman` and `paru`.
+2. **Backs up existing configs:** Preserves any current configs into a timestamped `~/.config/backup_slystack_*` directory.
+3. **Deploys hardware configurations:** Places your optimized Hyprland Lua, Noctalia, Kitty, and Waybar configs.
+4. **Sets up wallpaper & fonts:** Installs the bundled wallpaper and refreshes font caches.
+5. **Configures hybrid GPU & shell:** Configures Intel Iris Xe VAAPI hardware decode and sets up `nv <command>` for NVIDIA MX350 offload in Zsh.
+
+Once the command finishes, log out and select Hyprland (or run `hyprctl reload`), and your desktop is fully ready!
+
+---
+
 ## 💻 Hardware Profile
 
 | Component | Hardware Specification | Configuration |
@@ -26,34 +45,6 @@ Tailored specifically to run safely, smoothly, and tear-free on hybrid Intel + N
 * **Terminal Emulator:** [Kitty](https://sw.kovidgoyal.net/kitty/) with blurred transparency and Noctalia theme integration.
 * **Status Bar:** Waybar + Noctalia integrated bar.
 * **Shell:** Zsh with CachyOS performance aliases, system mirror updater, and Intel Iris Xe VAAPI hardware decode.
-
----
-
-## 📦 Quick Installation
-
-### 1. Install Required Packages
-On CachyOS / Arch Linux:
-
-```bash
-sudo pacman -S --needed hyprland kitty zsh waybar thunar ttf-jetbrains-mono-nerd grim slurp wl-clipboard
-paru -S --needed noctalia-bin
-```
-
-*(Optional apps configured in keybindings: `zen-browser-bin`, `obsidian`, `zed`)*
-
-### 2. Clone & Run the Installer
-```bash
-git clone https://github.com/<your-username>/slystack.git ~/slystack
-cd ~/slystack
-chmod +x install.sh
-./install.sh
-```
-
-The installer will:
-1. Automatically backup your existing `~/.config/{hypr,kitty,noctalia,waybar}` configurations with a timestamp.
-2. Deploy the hardware-tailored configuration files.
-3. Set up the bundled high-resolution wallpaper.
-4. Hook the shell configurations into `~/.zshrc`.
 
 ---
 
