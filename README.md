@@ -1,8 +1,8 @@
 # slystack 🚀
 
-Hardware-optimized, high-performance dotfiles for **CachyOS / Arch Linux**, aligned with and featuring **Hyprland (Lua)**, **Noctalia desktop shell**, **Kitty**, **Waybar**, and **Zsh**.
+Hardware-optimized, high-performance dotfiles for **CachyOS / Arch Linux**, featuring **Hyprland (Lua)**, **Noctalia desktop shell**, **Kitty**, **Waybar**, and **Zsh**.
 
-Built directly on `h4ni0/dotfiles` with broken `/home/h4ni0` hardcoded paths fixed, tailored for a **Dell laptop** (`1080p eDP-1`, hybrid Intel Iris Xe + NVIDIA MX350, touchpad), with an automated `install.sh` and configurable Obsidian vault sync.
+Tailored for a **Dell laptop** (`1080p eDP-1`, hybrid Intel Iris Xe + NVIDIA MX350, touchpad), with an automated `install.sh` and configurable Obsidian vault sync.
 
 ---
 
@@ -157,7 +157,7 @@ prime-run blender
 
 If you are deploying on different hardware, review these files:
 * `hypr/config/monitors.lua`: Adjust `eDP-1` resolution/refresh/scale or external monitor placement.
-* `hypr/config/devices.lua`: Adjust `kb_layout` (`us, ara`), layout toggle (`grp:shifts_toggle`), and touchpad settings (`natural_scroll = false` matches `h4ni0/dotfiles`).
+* `hypr/config/devices.lua`: Adjust `kb_layout` (`us, ara`), layout toggle (`grp:shifts_toggle`), and touchpad settings (`natural_scroll = false` by default).
 * `hypr/config/environment.lua` & `zsh/exports.zsh`: Adjust `LIBVA_DRIVER_NAME=iHD` if using non-Intel primary graphics.
 
 ---

@@ -7,7 +7,7 @@ hl.config({ input = { kb_rules = "" } })
 hl.config({ input = { follow_mouse = 1 } })
 hl.config({ input = { sensitivity = 0 } })
 
--- Laptop Touchpad optimization (Dell Touchpad; natural_scroll matches h4ni0/dotfiles)
+-- Laptop Touchpad optimization (Dell Touchpad)
 hl.config({
     input = {
         touchpad = {
