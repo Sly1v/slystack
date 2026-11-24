@@ -1,6 +1,6 @@
 # slystack 🚀
 
-Hardware-optimized, high-performance dotfiles for **CachyOS / Arch Linux**, aligned with [`h4ni0/dotfiles`](https://github.com/h4ni0/dotfiles) and featuring **Hyprland (Lua)**, **Noctalia desktop shell**, **Kitty**, **Waybar**, and **Zsh**.
+Hardware-optimized, high-performance dotfiles for **CachyOS / Arch Linux**, aligned with and featuring **Hyprland (Lua)**, **Noctalia desktop shell**, **Kitty**, **Waybar**, and **Zsh**.
 
 Built directly on `h4ni0/dotfiles` with broken `/home/h4ni0` hardcoded paths fixed, tailored for a **Dell laptop** (`1080p eDP-1`, hybrid Intel Iris Xe + NVIDIA MX350, touchpad), with an automated `install.sh` and configurable Obsidian vault sync.
 
