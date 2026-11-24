@@ -8,12 +8,57 @@ set -euo pipefail
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 BACKUP_DIR="${CONFIG_DIR}/backup_slystack_$(date +%Y%m%d_%H%M%S)"
+DEFAULT_OBSIDIAN_VAULT="${HOME}/Documents/Obsidian"
 
 AUTO_MODE=false
-for arg in "$@"; do
-    if [[ "$arg" == "--auto" || "$arg" == "-y" || "$arg" == "--all" ]]; then
-        AUTO_MODE=true
-    fi
+OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-}"
+
+usage() {
+    cat << EOF
+Usage: $(basename "$0") [OPTIONS]
+
+Options:
+  --auto, -y, --all             Run non-interactively (installs packages and uses default vault if unset)
+  --obsidian-vault <path>       Path to your Obsidian vault for Noctalia CSS snippet sync
+  -h, --help                    Show this help message and exit
+
+Environment variables:
+  OBSIDIAN_VAULT                Default Obsidian vault path (overridden by --obsidian-vault)
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --auto|-y|--all)
+            AUTO_MODE=true
+            shift
+            ;;
+        --obsidian-vault)
+            if [[ $# -lt 2 || -z "$2" ]]; then
+                echo "Error: --obsidian-vault requires a non-empty path argument." >&2
+                exit 1
+            fi
+            OBSIDIAN_VAULT="$2"
+            shift 2
+            ;;
+        --obsidian-vault=*)
+            OBSIDIAN_VAULT="${1#*=}"
+            if [[ -z "$OBSIDIAN_VAULT" ]]; then
+                echo "Error: --obsidian-vault requires a non-empty path argument." >&2
+                exit 1
+            fi
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Error: Unknown option: $1" >&2
+            usage >&2
+            exit 1
+            ;;
+    esac
 done
 
 RED='\033[0;31m'
@@ -39,35 +84,60 @@ echo -e "${YELLOW}Hardware Profile: Dell Laptop (Intel Iris Xe + NVIDIA MX350 + 
 echo -e "${BLUE}==>${NC} ${BOLD}Step 1: Installing system packages & dependencies...${NC}"
 
 PACMAN_DEPS=(
+    # Core Desktop & Wayland
     hyprland
+    noctalia
     kitty
     zsh
     waybar
     thunar
+    hyprpaper
     ttf-jetbrains-mono-nerd
-    grim
-    slurp
-    wl-clipboard
-    brightnessctl
-    playerctl
-    pamixer
-    intel-media-driver
-    libva-intel-driver
-    nvidia-prime
-    libnotify
     qt5-wayland
     qt6-wayland
     xdg-desktop-portal-hyprland
     xdg-desktop-portal
     gnome-keyring
-    hyprpaper
+
+    # Audio, Brightness, Screenshots & Waybar Utils
+    grim
+    slurp
+    hyprshot
+    wl-clipboard
+    brightnessctl
+    playerctl
+    pamixer
+    pipewire
+    bc
+    jq
+    libnotify
+
+    # Hybrid Graphics (Intel Iris Xe + NVIDIA PRIME)
+    intel-media-driver
+    libva-intel-driver
+    nvidia-prime
+
+    # Productivity, CLI & Media Extras
+    obsidian
+    neovim
+    bat
+    expac
+    ffmpeg
+    nvtop
+)
+
+AUR_DEPS=(
+    zen-browser-bin
+    wl-screenrec
+    claude-code
+    herdr-bin
 )
 
 DO_INSTALL="n"
 if [ "$AUTO_MODE" = true ]; then
     DO_INSTALL="y"
 else
-    read -rp "Install missing system packages automatically via pacman & paru? [Y/n]: " reply
+    read -rp "Install missing system packages automatically via pacman & AUR? [Y/n]: " reply
     DO_INSTALL="${reply:-y}"
 fi
 
@@ -75,7 +145,7 @@ if [[ "$DO_INSTALL" =~ ^[Yy]$ ]]; then
     echo -e "Installing official packages via pacman..."
     sudo pacman -S --needed --noconfirm "${PACMAN_DEPS[@]}"
 
-    # Install AUR helper (paru) if not present
+    # Detect AUR helper (paru or yay)
     AUR_HELPER=""
     if command -v paru &>/dev/null; then
         AUR_HELPER="paru"
@@ -84,10 +154,14 @@ if [[ "$DO_INSTALL" =~ ^[Yy]$ ]]; then
     fi
 
     if [ -n "$AUR_HELPER" ]; then
-        echo -e "Installing Noctalia shell via ${AUR_HELPER}..."
-        "$AUR_HELPER" -S --needed --noconfirm noctalia-bin || true
+        echo -e "Installing AUR packages via ${AUR_HELPER}..."
+        for pkg in "${AUR_DEPS[@]}"; do
+            "$AUR_HELPER" -S --needed --noconfirm "$pkg" || \
+                echo -e "${YELLOW}Warning: Failed to install AUR package '${pkg}'. Install it manually later.${NC}"
+        done
     else
-        echo -e "${YELLOW}Notice: Neither paru nor yay found. Install noctalia-bin manually.${NC}"
+        echo -e "${YELLOW}Notice: Neither paru nor yay found. Install AUR packages manually:${NC}"
+        echo -e "  ${AUR_DEPS[*]}"
     fi
 else
     echo -e "${YELLOW}Skipping package installation. Proceeding with configuration deployment.${NC}"
@@ -109,7 +183,7 @@ done
 echo -e "${GREEN}✓ Backup completed at: ${BACKUP_DIR}${NC}"
 
 # ------------------------------------------------------------------------------
-# 3. Deploy Hardware-Tailored Dotfiles
+# 3. Deploy Hardware-Tailored Dotfiles & Configure Obsidian Sync
 # ------------------------------------------------------------------------------
 echo -e "\n${BLUE}==>${NC} ${BOLD}Step 3: Deploying slystack configs...${NC}"
 mkdir -p "${CONFIG_DIR}/backgrounds"
@@ -121,6 +195,36 @@ cp -r "${DOTFILES_DIR}/waybar" "${CONFIG_DIR}/"
 cp "${DOTFILES_DIR}/backgrounds/wallpaper.png" "${CONFIG_DIR}/backgrounds/wallpaper.png"
 
 echo -e "${GREEN}✓ Hyprland, Noctalia, Kitty, Waybar & Wallpapers deployed!${NC}"
+
+if [[ -z "${OBSIDIAN_VAULT}" ]]; then
+    if [ "$AUTO_MODE" = true ]; then
+        OBSIDIAN_VAULT="${DEFAULT_OBSIDIAN_VAULT}"
+    else
+        read -rp "Obsidian vault path for Noctalia theme sync [${DEFAULT_OBSIDIAN_VAULT}]: " vault_reply
+        OBSIDIAN_VAULT="${vault_reply:-$DEFAULT_OBSIDIAN_VAULT}"
+    fi
+fi
+
+OBSIDIAN_VAULT="${OBSIDIAN_VAULT/#\~/$HOME}"
+if [[ "${OBSIDIAN_VAULT}" != "/" ]]; then
+    OBSIDIAN_VAULT="${OBSIDIAN_VAULT%/}"
+fi
+
+cat << EOF > "${CONFIG_DIR}/noctalia/obsidian.toml"
+# Noctalia dynamic theme snippet for Obsidian
+[theme.templates.user.obsidian_extra]
+input_path = "${CONFIG_DIR}/noctalia/Obsidian/obsidian.css"
+output_path = "${OBSIDIAN_VAULT}/.obsidian/snippets/noctalia.css"
+EOF
+
+if [[ -d "${OBSIDIAN_VAULT}" ]]; then
+    mkdir -p "${OBSIDIAN_VAULT}/.obsidian/snippets"
+    echo -e "${GREEN}✓ Noctalia Obsidian snippet target configured: ${OBSIDIAN_VAULT}/.obsidian/snippets/noctalia.css${NC}"
+else
+    echo -e "${YELLOW}Notice: Obsidian vault '${OBSIDIAN_VAULT}' does not exist yet.${NC}"
+    echo -e "${YELLOW}  Configured ${CONFIG_DIR}/noctalia/obsidian.toml -> ${OBSIDIAN_VAULT}/.obsidian/snippets/noctalia.css${NC}"
+    echo -e "${YELLOW}  Create the vault, edit ~/.config/noctalia/obsidian.toml, or re-run with --obsidian-vault <path>.${NC}"
+fi
 
 # ------------------------------------------------------------------------------
 # 4. Zsh Shell Integration

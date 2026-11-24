@@ -1,3 +1,7 @@
+# Noctalia dynamic theme snippet for Obsidian
+# Set your vault path during installation via:
+#   ./install.sh --obsidian-vault "/path/to/your/vault"
+# or with the OBSIDIAN_VAULT environment variable, or edit output_path below directly.
 [theme.templates.user.obsidian_extra]
-input_path = "/home/$USER/.config/noctalia/Obsidian/obsidian.css"
-output_path = "/mnt/Vault/Personal/.obsidian/snippets/noctalia.css"
+input_path = "~/.config/noctalia/Obsidian/obsidian.css"
+output_path = "~/Documents/Obsidian/.obsidian/snippets/noctalia.css"

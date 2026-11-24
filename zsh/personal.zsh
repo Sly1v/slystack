@@ -17,10 +17,12 @@ alias code="herdr session attach code"
 alias wii="whatisit"
 
 function record() {
+  mkdir -p ~/recordings
   wl-screenrec --audio --codec av1 --low-power=off --no-damage -v -f ~/recordings/"${1:-recording}-$(date +%Y-%m-%d-%H-%M).mp4"
 }
 
 function record-audio() {
+  mkdir -p ~/recordings
   pw-record -v ~/recordings/"${1:-recording}-$(date +%Y-%m-%d-%H-%M).wav"
 }
 
