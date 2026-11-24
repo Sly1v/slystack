@@ -10,9 +10,9 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("systemctl --user restart xdg-desktop-portal-hyprland.service xdg-desktop-portal.service")
 	hl.exec_cmd("gnome-keyring-daemon --start --components=secrets,pkcs11,ssh")
 
-	-- Launch Noctalia Desktop Shell (falls back gracefully if not running as daemon)
+	-- Launch Noctalia Desktop Shell (also manages wallpaper via noctalia/config.toml)
 	hl.exec_cmd("noctalia")
 
-	-- Optional: launch hyprpaper wallpaper daemon
-	hl.exec_cmd("hyprpaper")
+	-- Optional: launch hyprpaper wallpaper daemon if not using Noctalia's wallpaper manager
+	-- hl.exec_cmd("hyprpaper")
 end)

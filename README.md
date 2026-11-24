@@ -1,8 +1,8 @@
 # slystack 🚀
 
-Hardware-optimized, high-performance dotfiles for **CachyOS / Arch Linux**, featuring **Hyprland (Lua)**, **Noctalia desktop shell**, **Kitty**, **Waybar**, and **Zsh**.
+Hardware-optimized, high-performance dotfiles for **CachyOS / Arch Linux**, aligned with [`h4ni0/dotfiles`](https://github.com/h4ni0/dotfiles) and featuring **Hyprland (Lua)**, **Noctalia desktop shell**, **Kitty**, **Waybar**, and **Zsh**.
 
-Tailored specifically to run safely, smoothly, and tear-free on hybrid Intel + NVIDIA laptops.
+Built directly on `h4ni0/dotfiles` with broken `/home/h4ni0` hardcoded paths fixed, tailored for a **Dell laptop** (`1080p eDP-1`, hybrid Intel Iris Xe + NVIDIA MX350, touchpad), with an automated `install.sh` and configurable Obsidian vault sync.
 
 ---
 
@@ -23,10 +23,10 @@ OBSIDIAN_VAULT="/path/to/your/vault" ./install.sh --auto
 ```
 
 ### What this command does automatically:
-1. **Installs official & extra dependencies:** Installs Hyprland, `noctalia` (Arch `extra`), Kitty, Waybar, Zsh, Thunar, Hyprpaper, JetBrainsMono Nerd Font, audio/brightness/screenshot tools (`grim`, `slurp`, `hyprshot`, `pipewire`), Intel VAAPI + NVIDIA PRIME drivers, and CLI/productivity extras (`obsidian`, `neovim`, `bat`, `expac`, `ffmpeg`, `nvtop`, `bc`, `jq`) via `pacman`.
+1. **Installs official & extra dependencies:** Installs Hyprland, `noctalia` (Arch `extra`), Kitty, Waybar, Zsh, Thunar, Hyprpaper, JetBrainsMono Nerd Font, audio/brightness/screenshot tools (`grim`, `slurp`, `hyprshot`, `pipewire`), Intel VAAPI + NVIDIA PRIME drivers, and CLI/productivity extras (`obsidian`, `zed`, `neovim`, `bat`, `expac`, `ffmpeg`, `nvtop`, `bc`, `jq`) via `pacman`.
 2. **Installs AUR extras:** Installs `zen-browser-bin`, `wl-screenrec`, `claude-code`, and `herdr-bin` via `paru` or `yay` (if available).
 3. **Backs up existing configs:** Preserves any existing configs into a timestamped `~/.config/backup_slystack_*` directory.
-4. **Deploys hardware configurations & Obsidian sync:** Installs Hyprland Lua, Noctalia, Kitty, Waybar, wallpaper, and writes `~/.config/noctalia/obsidian.toml` with resolved paths for your Obsidian vault (defaults to `~/Documents/Obsidian` in `--auto` mode, or prompts interactively).
+4. **Deploys hardware configurations & Obsidian sync:** Installs Hyprland Lua, Noctalia, Kitty, Waybar, wallpaper, resolves wallpaper paths in `~/.config/noctalia/config.toml`, and writes `~/.config/noctalia/obsidian.toml` for your Obsidian vault (defaults to `~/Documents/Obsidian` in `--auto` mode, or prompts interactively).
 5. **Configures hybrid GPU & Zsh:** Enables Intel Iris Xe VAAPI hardware decode, integrates Zsh scripts in `~/.zshrc`, sets up `nv <command>` for NVIDIA MX350 offload, and refreshes font caches.
 
 Once finished, log out and select Hyprland (or run `hyprctl reload`), and your desktop is ready!
@@ -37,12 +37,12 @@ Once finished, log out and select Hyprland (or run `hyprctl reload`), and your d
 
 | Component | Hardware Specification | Configuration |
 | :--- | :--- | :--- |
-| **Device** | Dell Laptop | Multi-touchpad with natural scrolling & 3-finger gestures |
+| **Device** | Dell Laptop | Multi-touchpad (`natural_scroll = false`, 3-finger swipe) |
 | **CPU** | 11th Gen Intel Core i7-1165G7 @ 2.80GHz | BORE / CachyOS scheduler optimized |
 | **Integrated GPU** | Intel Iris Xe Graphics (TigerLake-LP GT2) | Primary Wayland compositor renderer (`LIBVA_DRIVER_NAME=iHD`) |
 | **Dedicated GPU** | NVIDIA GeForce MX350 (Pascal GP107M) | On-demand PRIME render offload via `nv <command>` or `prime-run` |
 | **Display** | 1920x1080@60Hz (`eDP-1`) | 1.5x fractional scale + responsive window sizing |
-| **Keyboard** | English (US) + Arabic (`us, ara`) | Layout switch toggle via `Alt + Shift` |
+| **Keyboard** | English (US) + Arabic (`us, ara`) | Layout switch toggle via `Left Shift + Right Shift` |
 
 ---
 
@@ -64,8 +64,9 @@ All tools referenced by Hyprland keybindings, Waybar scripts, and Zsh helpers ar
 | :--- | :--- | :--- |
 | `noctalia` | Arch `extra` | Desktop shell, launcher, bar, lockscreen, notifications, theming |
 | `obsidian` | Arch `extra` | Note taking (`Super + O`) & Noctalia dynamic CSS snippet sync |
+| `zed` | Arch `extra` | Default `$EDITOR` (`zed`) with Noctalia theme template |
 | `hyprshot` | Arch `extra` | Active window screenshot to clipboard (`Super + Shift + Ctrl + Space`) |
-| `neovim` | Arch `extra` | Default `$EDITOR` (`nvim`) and `vi` alias |
+| `neovim` | Arch `extra` | Terminal editor (`vi` alias) with Noctalia theme template |
 | `bat` | Arch `extra` | Syntax-highlighted man pages (`MANPAGER`) |
 | `expac` | Arch `extra` | Package inspection aliases (`big`, `rip`) |
 | `ffmpeg` | Arch `extra` | Intel VAAPI AV1 transcoding helpers (`proxy`, `decode`) |
@@ -108,7 +109,7 @@ All tools referenced by Hyprland keybindings, Waybar scripts, and Zsh helpers ar
 | `Super + ,` | Toggle Noctalia settings |
 | `Super + Shift + BackSpace` | Toggle Noctalia bar |
 | `Alt + Tab` | Window Switcher (`Super + Tab` focuses last window) |
-| `Alt + Shift` | Toggle Keyboard Layout (English ⇄ Arabic) |
+| `Left Shift + Right Shift` | Toggle Keyboard Layout (English ⇄ Arabic) |
 | `Super + Shift + Space` | Screenshot region to clipboard (Noctalia) |
 | `Super + Shift + Ctrl + Space` | Screenshot active window to clipboard (`hyprshot`) |
 | `Super + h / j / k / l` | Move focus (`Super + Shift + h/j/k/l` moves window) |
@@ -156,7 +157,7 @@ prime-run blender
 
 If you are deploying on different hardware, review these files:
 * `hypr/config/monitors.lua`: Adjust `eDP-1` resolution/refresh/scale or external monitor placement.
-* `hypr/config/devices.lua`: Adjust `kb_layout` (`us, ara`) and touchpad settings.
+* `hypr/config/devices.lua`: Adjust `kb_layout` (`us, ara`), layout toggle (`grp:shifts_toggle`), and touchpad settings (`natural_scroll = false` matches `h4ni0/dotfiles`).
 * `hypr/config/environment.lua` & `zsh/exports.zsh`: Adjust `LIBVA_DRIVER_NAME=iHD` if using non-Intel primary graphics.
 
 ---

@@ -119,6 +119,7 @@ PACMAN_DEPS=(
 
     # Productivity, CLI & Media Extras
     obsidian
+    zed
     neovim
     bat
     expac
@@ -193,6 +194,8 @@ cp -r "${DOTFILES_DIR}/kitty" "${CONFIG_DIR}/"
 cp -r "${DOTFILES_DIR}/noctalia" "${CONFIG_DIR}/"
 cp -r "${DOTFILES_DIR}/waybar" "${CONFIG_DIR}/"
 cp "${DOTFILES_DIR}/backgrounds/wallpaper.png" "${CONFIG_DIR}/backgrounds/wallpaper.png"
+
+sed -i "s|~/.config/backgrounds|${CONFIG_DIR}/backgrounds|g" "${CONFIG_DIR}/noctalia/config.toml"
 
 echo -e "${GREEN}✓ Hyprland, Noctalia, Kitty, Waybar & Wallpapers deployed!${NC}"
 

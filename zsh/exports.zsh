@@ -1,4 +1,4 @@
-export EDITOR=nvim
+export EDITOR=zed
 
 # Package managers & language runtimes
 export PNPM_HOME="$HOME/.local/share/pnpm"
@@ -9,6 +9,7 @@ esac
 
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+[[ -d "$HOME/.opencode/bin" ]] && export PATH="$HOME/.opencode/bin:$PATH"
 
 # Hybrid Graphics / Intel Iris Xe Hardware Video Acceleration
 export LIBVA_DRIVER_NAME=iHD
